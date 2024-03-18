@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the database schema
+
+// Define the "Product" table
+model Product {
+  id   String @id @default(uuid())
+  name String
+
+  // Define relationships
+  packages  Package[]
+  types     Type[]
+  offerings Offering[]
+}
+
+// Define the "package" table
+model Package {
+  id               String       @id @default(uuid())
+  name             String
+  category         CategoryEnum
+  target_sales     Int          @default(10)
+  payback_period   Int          @default(1)
+  operational_time Int          @default(12)
+  excess_capacity  Int          @default(0)
+  capex            Float        @default(0)
+  opex             Float        @default(0)
+  cogs             Float        @default(0)
+  tariff           Float        @default(0)
+  create_at        DateTime     @default(now())
+  update_at        DateTime     @updatedAt
+  delete_at        DateTime?
+
+  // Define relationships
+  product          Product            @relation(fields: [productId], references: [id])
+  productId        String
+  Offering_Package Offering_Package[]
+  Total            Total[]
+}
+
+model Offering_Package {
+  package    Package  @relation(fields: [packageId], references: [id])
+  packageId  String
+  offering   Offering @relation(fields: [offeringId], references: [id])
+  offeringId String
+
+  @@id([packageId, offeringId])
+}
+
+// Define the "offering" table
+model Offering {
+  id         String @id @default(uuid())
+  offer_name String
+
+  // Define relationships
+  Offering_Package Offering_Package[]
+  Product          Product           @relation(fields: [productId], references: [id])
+  productId        String
+}
+
+// Define the "type" table
+model Type {
+  id   String   @id @default(uuid())
+  type TypeEnum
+
+  // Define relationships
+  product    Product    @relation(fields: [productId], references: [id])
+  productId  String
+  categories Category[]
+  Total      Total[]
+}
+
+// Define the "category" table
+model Category {
+  id       String @id @default(uuid())
+  typeId   String
+  category String
+
+  // Define relationships
+  type  Type   @relation(fields: [typeId], references: [id])
+  datas Data[]
+}
+
+// Define the "data" table
+model Data {
+  id           String    @id @default(uuid())
+  quantity     Int
+  frequency    Int
+  unit         String
+  excess       Float
+  code         String
+  event_module String
+  grade        String
+  create_at    DateTime  @default(now())
+  update_at    DateTime  @updatedAt
+  delete_at    DateTime?
+
+  // Define relationships
+  category   Category     @relation(fields: [categoryId], references: [id])
+  categoryId String
+  components Components[]
+}
+
+// Define the "components" table
+model Components {
+  id           String    @id @default(uuid())
+  name         String
+  item         String
+  unit         Int
+  specs        String
+  priceperunit Float
+  quantity     Int
+  create_at    DateTime  @default(now())
+  update_at    DateTime  @updatedAt
+  delete_at    DateTime?
+
+  // Define relationships
+  data   Data   @relation(fields: [dataId], references: [id])
+  dataId String
+}
+
+// Define the "total" table
+model Total {
+  package   Package @relation(fields: [packageId], references: [id])
+  packageId String
+  type      Type    @relation(fields: [typeId], references: [id])
+  typeId    String
+  total     Float
+
+  @@id([packageId, typeId])
+}
+
+enum CategoryEnum {
+  MAIN_FEATURES
+  ADD_ON
+}
+
+enum TypeEnum {
+  CAPEX
+  OPEX
+  CoGS
+}
