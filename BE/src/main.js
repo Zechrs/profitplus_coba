@@ -1,6 +1,8 @@
 
 
 const express = require('express');
+const cors = require('cors');
+
 const productRoutes = require('../src/routes/productRoutes');
 const packageRoutes = require('../src/routes/packageRoutes');
 const offeringRoutes = require('../src/routes/offeringRoutes');
@@ -12,14 +14,14 @@ const totalRoutes = require('./routes/totalRoutes');
 const offeringPackageRoutes = require('./routes/offeringPackageRoutes');
 
 
-
-
 const app = express();
 app.use(express.json());
+app.use(cors());
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
@@ -30,7 +32,7 @@ app.use('/products', productRoutes);
 app.use('/packages', packageRoutes);
 app.use('/offering', offeringRoutes);
 app.use('/type', typeRoutes);
-app.use('/categoyy', categoryRoutes);
+app.use('/category', categoryRoutes);
 app.use('/data', dataRoutes);
 app.use('/components', componentsRoutes);
 app.use('/totals', totalRoutes);

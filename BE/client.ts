@@ -3,23 +3,10 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  // prisma.package.create({ 
-  //   data: {
-  //     name: "Sample Package",
-  //     category: "MAIN_FEATURES",
-  //     target_sales,
-  //     payback_period,
-  //     operational_time,
-  //     excess_capacity,
-  //     capex,
-  //     opex,
-  //     cogs,
-  //     tariff,
-  //     productId
-  //   } 
-  // });
-  // const data = await prisma.package.findMany();
-  // console.log(data);
+  const result = await prisma.package.findMany()
+
+  console.log(result);
+
 }
 
 main()
