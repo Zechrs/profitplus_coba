@@ -1,6 +1,5 @@
-
-
 const express = require('express');
+
 const productRoutes = require('../src/routes/productRoutes');
 const packageRoutes = require('../src/routes/packageRoutes');
 const offeringRoutes = require('../src/routes/offeringRoutes');
@@ -12,13 +11,10 @@ const totalRoutes = require('./routes/totalRoutes');
 const offeringPackageRoutes = require('./routes/offeringPackageRoutes');
 
 
-
-
 const app = express();
 app.use(express.json());
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
-
 
 // Mount product routes
 app.use('/products', productRoutes);
