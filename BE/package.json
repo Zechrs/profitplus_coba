@@ -22,5 +22,9 @@
     "cors": "^2.8.5",
     "express": "^4.18.3"
   },
-  "description": ""
+  "description": "",
+  "prisma": {
+    "schema": "src/models/schema.prisma"
+  }
+  
 }

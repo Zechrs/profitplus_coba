@@ -1,4 +1,4 @@
-const dataService = require('../services/dataService');
+const dataService = require('./dataService');
 
 async function createData(req, res) {
   const { quantity, frequency, unit, excess, code, event_module, grade, categoryId } = req.body;

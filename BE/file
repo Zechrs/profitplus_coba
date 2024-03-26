@@ -1,1 +1,1 @@
-curl -X POST -H "Content-Type: application/json" -d '{"name": "testcurl"}' http:/localhost:3000/products
+curl -X POST -H "Content-Type: application/json" -d '{"name": "testcurl"}' http:/localhost:3001/products

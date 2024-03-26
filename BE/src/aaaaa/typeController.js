@@ -1,4 +1,4 @@
-const typeService = require('../services/typeService');
+const typeService = require('./typeService');
 
 async function createType(req, res) {
   const { type, productId } = req.body;

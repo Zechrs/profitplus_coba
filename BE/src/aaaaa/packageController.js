@@ -1,6 +1,6 @@
 // controllers/packageController.js
 
-const packageService = require('../services/packageService');
+const packageService = require('./packageService');
 
 async function createPackage(req, res) {
   const { name, category, target_sales, payback_period, operational_time, excess_capacity, capex, opex, cogs, tariff, productId } = req.body;

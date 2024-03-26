@@ -1,4 +1,4 @@
-const offeringPackageService = require('../services/offeringPackageService');
+const offeringPackageService = require('./offeringPackageService');
 
 async function createOfferingPackage(req, res) {
   const { packageId, offeringId } = req.body;

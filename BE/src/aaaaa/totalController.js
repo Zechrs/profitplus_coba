@@ -1,4 +1,4 @@
-const totalService = require('../services/totalService');
+const totalService = require('./totalService');
 
 async function createTotal(req, res) {
   const { packageId, typeId, total } = req.body;

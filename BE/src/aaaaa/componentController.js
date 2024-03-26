@@ -1,4 +1,4 @@
-const componentsService = require('../services/componentService');
+const componentsService = require('./componentService');
 
 async function createComponent(req, res) {
   const { name, item, unit, specs, priceperunit, quantity, dataId } = req.body;

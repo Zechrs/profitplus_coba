@@ -1,4 +1,4 @@
-// services/productService.js
+// services/product/productService.js
 
 const { PrismaClient } = require('@prisma/client');
 

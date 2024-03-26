@@ -1,6 +1,6 @@
 // controllers/productController.js
 
-const productService = require('../services/productService');
+const productService = require('../../services/tariffServices/product/productService');
 
 async function createProduct(req, res) {
   const { name } = req.body;

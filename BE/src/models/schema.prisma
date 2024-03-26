@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Define the "Activity" table
+model Activity {
+  id        Int      @id @default(autoincrement())
+  activity  String
+  timestamp DateTime @default(now())
+}
+
+// Define the "Product" table
+model Product {
+  id            Int              @id @default(autoincrement())
+  name          String           @unique
+  tariff_status TariffStatusEnum @default(None)
+
+  // Define relationships
+  packages  Package[]
+  types     Type[]
+  offerings Offering[]
+}
+
+// Define the "package" table
+model Package {
+  id               Int          @id @default(autoincrement())
+  name             String       @unique
+  category         CategoryEnum
+  target_sales     Int          @default(10)
+  payback_period   Int          @default(1)
+  operational_time Int          @default(12)
+  excess_capacity  Int          @default(0)
+  capex            Float        @default(0)
+  opex             Float        @default(0)
+  cogs             Float        @default(0)
+  tariff           Float        @default(0)
+  create_at        DateTime     @default(now())
+  update_at        DateTime     @updatedAt
+  delete_at        DateTime?
+
+  // Define relationships
+  product           Product            @relation(fields: [productId], references: [id])
+  productId         Int
+  Offering_Packages Offering_Package[]
+  Totals            Total[]
+  Detail_Package    Detail_Package[]
+}
+
+
+// Define the "offering" table
+model Offering {
+  id         Int    @id @default(autoincrement())
+  offer_name String @unique
+
+  // Define relationships
+  Offering_Packages Offering_Package[]
+  Product           Product            @relation(fields: [productId], references: [id])
+  productId         Int
+}
+
+model Offering_Package {
+  package    Package  @relation(fields: [packageId], references: [id])
+  packageId  Int
+  offering   Offering @relation(fields: [offeringId], references: [id])
+  offeringId Int
+
+  @@id([packageId, offeringId])
+}
+
+// Define the "type" table
+model Type {
+  id   Int      @id @default(autoincrement())
+  type TypeEnum
+
+  // Define relationships
+  product    Product    @relation(fields: [productId], references: [id])
+  productId  Int
+  categories Category[]
+  Totals     Total[]
+}
+
+// Define the "category" table
+model Category {
+  id       Int    @id @default(autoincrement())
+  category String @unique
+
+  // Define relationships
+  type    Type     @relation(fields: [typeId], references: [id])
+  typeId  Int
+  Details Detail[]
+}
+
+// Define the "detail" table
+model Detail {
+  id           Int         @id @default(autoincrement())
+  event_module String      
+  nature       String?
+  pic          String?
+  description  String?
+  source       sourceEnum?
+  unit         String?
+  code         String?
+  grade        String?
+  create_at    DateTime    @default(now())
+  update_at    DateTime    @updatedAt
+  delete_at    DateTime?
+
+  // Define relationships
+  category       Category         @relation(fields: [categoryId], references: [id])
+  categoryId     Int
+  components     Components[]
+  Detail_Package Detail_Package[]
+}
+
+model Detail_Package {
+  detail      Detail  @relation(fields: [detailId], references: [id])
+  detailId    Int
+  package     Package @relation(fields: [packageId], references: [id])
+  packageId   Int
+  quantity    Int?
+  frequency   Int?
+  excess      Float?
+  information String?
+
+  @@id([detailId, packageId])
+}
+
+// Define the "components" table
+model Components {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  item         String?
+  unit         Int?
+  specs        String?
+  priceperunit Float     @default(1000)
+  quantity     Int?
+  create_at    DateTime  @default(now())
+  update_at    DateTime  @updatedAt
+  delete_at    DateTime?
+
+  // Define relationships
+  detail   Detail @relation(fields: [detailId], references: [id])
+  detailId Int
+}
+
+// Define the "total" table
+model Total {
+  package   Package @relation(fields: [packageId], references: [id])
+  packageId Int
+  type      Type    @relation(fields: [typeId], references: [id])
+  typeId    Int
+  total     Float
+
+  @@id([packageId, typeId])
+}
+
+enum CategoryEnum {
+  MAIN_FEATURES
+  ADD_ON
+}
+
+enum sourceEnum {
+  Enterprise
+  Product
+}
+
+enum TypeEnum {
+  CAPEX
+  OPEX
+  CoGS
+}
+
+enum TariffStatusEnum {
+  Accepted
+  Rejected
+  NeedApproval
+  None
+}
