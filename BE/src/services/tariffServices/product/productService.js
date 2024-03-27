@@ -24,7 +24,7 @@ async function getProductById(id) {
   });
 }
 
-async function updateProduct(id, name) {
+async function updateProduct(id , name) {
   return prisma.product.update({
     where: {
       id,

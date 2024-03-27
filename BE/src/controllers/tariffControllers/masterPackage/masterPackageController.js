@@ -4,37 +4,29 @@ const masterPackageService = require('../../../services/tariffServices/masterPac
 const webResponses = require('../../../helpers/web/webResponses');
 
 async function createDetail(req, res) {
-    const { quantity, frequency, unit, excess, code, event_module, grade, categoryId } = req.body;
+    const { event_module, nature, pic, description, unit, code, source, grade, categoryId } = req.body;
     try {
-        const createdDetail = await masterPackageService.createDetail(quantity, frequency, unit, excess, code, event_module, grade, categoryId);
-        res.json(createdDetail);
+        const createdDetail = await masterPackageService.createDetail(event_module, nature, pic, description, unit, code, source, grade, categoryId);
+        const successMessage = 'Detail Created successfully';
+        const response = webResponses.successResponse(successMessage, createdDetail);
+        res.json(response);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create detail' });
+        const errorMessage = 'Failed to create detail';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
 
 async function getAllDetails(req, res) {
     try {
-        const detail = await masterPackageService.getAllDetails();
-        res.json(detail);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch detail' });
-    }
-}
-
-async function getAllDetailsWithPagination(req, res) {
-    const { pageNumber, pageSize } = req.query; // Assuming pagination parameters are passed in query parameters
-    try {
-        const { details, total } = await masterPackageService.getAllDetailsWithPagination(pageNumber, pageSize);
-        // Sending success response with paginated details
+        const details = await masterPackageService.getAllDetails();
         const successMessage = 'Details fetched successfully';
-        const responseObj =  webResponses.successResponsePage(successMessage, parseInt(page), parseInt(limit), total, details);
-        res.json(responseObj);
+        const response = webResponses.successResponse(successMessage, details);
+        res.json(response);
     } catch (error) {
-        // Sending error response
         const errorMessage = 'Failed to fetch details';
-        const responseObj = webResponses.errorResponse(errorMessage);
-        res.status(500).json(responseObj);
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
 
@@ -44,22 +36,32 @@ async function getDetailById(req, res) {
     try {
         const detail = await masterPackageService.getDetailById(id);
         if (!detail) {
-        return res.status(404).json({ error: 'Detail not found' });
+            return res.status(404).json({ error: 'Detail not found' });
         }
-        res.json(detail);
+        const successMessage = 'Detail fetched successfully';
+        const response = webResponses.successResponse(successMessage, detail);
+        res.json(response);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch detail' });
+        const errorMessage = 'Failed to fetch detail';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
 
 async function updateDetail(req, res) {
     const { id } = req.params;
-    const { quantity, frequency, unit, excess, code, event_module, grade, categoryId } = req.body;
+    const { event_module, nature, pic, description, unit, code, source, grade, categoryId } = req.body;
     try {
-        const updatedDetail = await masterPackageService.updateDetail(id, quantity, frequency, unit, excess, code, event_module, grade, categoryId);
-        res.json(updatedDetail);
+        const updatedDetail = await masterPackageService.updateDetail(id, event_module, nature, pic, description, unit, code, source, grade, categoryId);
+        const successMessage = 'Detail updated successfully';
+        const response = webResponses.successResponse(successMessage, updatedDetail);
+        res.json(response);
+
     } catch (error) {
-        res.status(500).json({ error: 'Failed to update detail' });
+        const errorMessage = 'Failed to update detail';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
+
     }
 }
 
@@ -67,9 +69,14 @@ async function deleteDetail(req, res) {
     const { id } = req.params;
     try {
         await masterPackageService.deleteDetail(id);
-        res.json({ message: 'Detail deleted successfully' });
+        const successMessage = 'Detail deleted successfully';
+        const response = webResponses.successResponse(successMessage);
+        res.json(response);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete detail' });
+        const errorMessage = 'Failed to delete detail';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
+
     }
 }
 
@@ -79,7 +86,10 @@ async function createComponent(req, res) {
         const createdComponent = await masterPackageService.createComponent(name, item, unit, specs, priceperunit, quantity, dataId);
         res.json(createdComponent);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create component' });
+        const errorMessage = 'Failed to create componenent';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
+
     }
 }
 
@@ -88,7 +98,9 @@ async function getAllComponents(req, res) {
         const components = await masterPackageService.getAllComponents();
         res.json(components);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch components' });
+        const errorMessage = 'Failed to fetch componenents';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
 
@@ -101,7 +113,9 @@ async function getComponentById(req, res) {
         }
         res.json(component);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch component' });
+        const errorMessage = 'Failed to fetch componenent';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
 
@@ -112,7 +126,9 @@ async function updateComponent(req, res) {
         const updatedComponent = await masterPackageService.updateComponent(id, name, item, unit, specs, priceperunit, quantity, dataId);
         res.json(updatedComponent);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to update component' });
+        const errorMessage = 'Failed to update componenent';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
 
@@ -122,15 +138,15 @@ async function deleteComponent(req, res) {
         await masterPackageService.deleteComponent(id);
         res.json({ message: 'Component deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete component' });
+        const errorMessage = 'Failed to delete componenent';
+        const errResponse = webResponses.errorResponse(errorMessage);
+        res.status(500).json({ errResponse });
     }
 }
-
 
 module.exports = {
     createDetail,
     getAllDetails,
-    getAllDetailsWithPagination,
     getDetailById,
     updateDetail,
     deleteDetail,

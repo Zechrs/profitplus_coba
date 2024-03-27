@@ -2,8 +2,9 @@
 
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 
-// const productRoutes = require('./routes/product/productRoutes');
+const productRoutes = require('./routes/tariffRoutes/product/productRoutes');
 // const packageRoutes = require('../src/routes/packageRoutes');
 // const offeringRoutes = require('../src/routes/offeringRoutes');
 // const typeRoutes = require('../src/routes/typeRoutes');
@@ -19,7 +20,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3001;
@@ -31,7 +31,7 @@ app.listen(PORT, () => {
 // Mount product routes
 app.use('/tariff/dashboard', dashboardRouter);
 app.use('/tariff/masterPackage', masterPackageRouter);
-// app.use('/products', productRoutes);
+app.use('/tariff/products', productRoutes);
 // app.use('/packages', packageRoutes);
 // app.use('/offering', offeringRoutes);
 // app.use('/type', typeRoutes);

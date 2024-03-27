@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const productController = require('../../../controllers/product/productController');
+const productController = require('../../../controllers/tariffControllers/product/productController');
 
 router.post('/', productController.createProduct);
 router.get('/', productController.getAllProducts);
